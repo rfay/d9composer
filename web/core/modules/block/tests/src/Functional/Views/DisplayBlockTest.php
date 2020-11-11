@@ -65,7 +65,10 @@ class DisplayBlockTest extends ViewTestBase {
    * Tests default and custom block categories.
    */
   public function testBlockCategory() {
-    $this->drupalLogin($this->drupalCreateUser(['administer views', 'administer blocks']));
+    $this->drupalLogin($this->drupalCreateUser([
+      'administer views',
+      'administer blocks',
+    ]));
 
     // Create a new view in the UI.
     $edit = [];
@@ -368,7 +371,11 @@ class DisplayBlockTest extends ViewTestBase {
    * Tests the contextual links on a Views block.
    */
   public function testBlockContextualLinks() {
-    $this->drupalLogin($this->drupalCreateUser(['administer views', 'access contextual links', 'administer blocks']));
+    $this->drupalLogin($this->drupalCreateUser([
+      'administer views',
+      'access contextual links',
+      'administer blocks',
+    ]));
     $block = $this->drupalPlaceBlock('views_block:test_view_block-block_1');
     $cached_block = $this->drupalPlaceBlock('views_block:test_view_block-block_1');
     $this->drupalGet('test-page');
@@ -386,7 +393,7 @@ class DisplayBlockTest extends ViewTestBase {
     $post = ['ids[0]' => $id, 'ids[1]' => $cached_id, 'tokens[0]' => $id_token, 'tokens[1]' => $cached_id_token];
     $url = 'contextual/render?_format=json,destination=test-page';
     $this->getSession()->getDriver()->getClient()->request('POST', $url, $post);
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     $json = Json::decode($this->getSession()->getPage()->getContent());
     $this->assertIdentical($json[$id], '<ul class="contextual-links"><li class="block-configure"><a href="' . base_path() . 'admin/structure/block/manage/' . $block->id() . '">Configure block</a></li><li class="entityviewedit-form"><a href="' . base_path() . 'admin/structure/views/view/test_view_block/edit/block_1">Edit view</a></li></ul>');
     $this->assertIdentical($json[$cached_id], '<ul class="contextual-links"><li class="block-configure"><a href="' . base_path() . 'admin/structure/block/manage/' . $cached_block->id() . '">Configure block</a></li><li class="entityviewedit-form"><a href="' . base_path() . 'admin/structure/views/view/test_view_block/edit/block_1">Edit view</a></li></ul>');

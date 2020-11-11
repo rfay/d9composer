@@ -44,11 +44,11 @@ class ElementValidationTest extends WebDriverTestBase {
     $this->assertNotNull($placeholder_text, 'A callback successfully echoed back a string.');
 
     $this->drupalGet('ajax_validation_test');
-    // Partialy complete the form with a number.
+    // Partially complete the form with a number.
     $page->fillField('drivernumber', '12345');
     $page->findField('spare_required_field')->focus();
 
-    // The AJAX request/resonse will complete successfully when a InsertCommand
+    // The AJAX request/response will complete successfully when a InsertCommand
     // injects a message with a placeholder element into the DOM with the
     // submitted number.
     $placeholder_number = $assert->waitForElement('css', "ul.messages__list li.messages__item em:contains('12345')");

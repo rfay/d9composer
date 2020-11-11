@@ -115,7 +115,7 @@ class DistributionProfileExistingSettingsTest extends InstallerTestBase {
    */
   public function testInstalled() {
     $this->assertUrl('user/1');
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     // Confirm that we are logged-in after installation.
     $this->assertText($this->rootUser->getAccountName());
 
@@ -124,7 +124,6 @@ class DistributionProfileExistingSettingsTest extends InstallerTestBase {
     $this->assertEqual($this->config('core.extension')->get('profile'), 'mydistro', 'The install profile has been written to core.extension configuration.');
 
     $this->rebuildContainer();
-    $this->pass('Container can be rebuilt even though distribution is not written to settings.php.');
     $this->assertEqual(\Drupal::installProfile(), 'mydistro');
   }
 

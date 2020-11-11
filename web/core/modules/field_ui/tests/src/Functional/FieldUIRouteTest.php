@@ -48,7 +48,7 @@ class FieldUIRouteTest extends BrowserTestBase {
 
     // Test manage display tabs and titles.
     $this->drupalGet('admin/config/people/accounts/display/compact');
-    $this->assertResponse(403);
+    $this->assertSession()->statusCodeEquals(403);
 
     $this->drupalGet('admin/config/people/accounts/display');
     $this->assertTitle('Manage display | Drupal');
@@ -62,7 +62,7 @@ class FieldUIRouteTest extends BrowserTestBase {
 
     // Test manage form display tabs and titles.
     $this->drupalGet('admin/config/people/accounts/form-display/register');
-    $this->assertResponse(403);
+    $this->assertSession()->statusCodeEquals(403);
 
     $this->drupalGet('admin/config/people/accounts/form-display');
     $this->assertTitle('Manage form display | Drupal');
@@ -70,7 +70,7 @@ class FieldUIRouteTest extends BrowserTestBase {
 
     $edit = ['display_modes_custom[register]' => TRUE];
     $this->drupalPostForm(NULL, $edit, t('Save'));
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     $this->drupalGet('admin/config/people/accounts/form-display/register');
     $this->assertTitle('Manage form display | Drupal');
     $this->assertLocalTasks();
@@ -87,7 +87,7 @@ class FieldUIRouteTest extends BrowserTestBase {
 
     $edit = ['display_modes_custom[test]' => TRUE];
     $this->drupalPostForm('admin/config/people/accounts/display', $edit, t('Save'));
-    $this->assertLink('Test');
+    $this->assertSession()->linkExists('Test');
 
     // Create new form mode and verify it's available on the Manage Form
     // Display screen after enabling it.
@@ -100,17 +100,17 @@ class FieldUIRouteTest extends BrowserTestBase {
 
     $edit = ['display_modes_custom[test]' => TRUE];
     $this->drupalPostForm('admin/config/people/accounts/form-display', $edit, t('Save'));
-    $this->assertLink('Test');
+    $this->assertSession()->linkExists('Test');
   }
 
   /**
    * Asserts that local tasks exists.
    */
   public function assertLocalTasks() {
-    $this->assertLink('Settings');
-    $this->assertLink('Manage fields');
-    $this->assertLink('Manage display');
-    $this->assertLink('Manage form display');
+    $this->assertSession()->linkExists('Settings');
+    $this->assertSession()->linkExists('Manage fields');
+    $this->assertSession()->linkExists('Manage display');
+    $this->assertSession()->linkExists('Manage form display');
   }
 
   /**

@@ -163,7 +163,7 @@ class EntityReferenceAdminTest extends BrowserTestBase {
       'field_test_entity_ref_field[1][target_id]' => 'Foo Node (' . $node2->id() . ')',
     ];
     $this->drupalPostForm(NULL, $edit, t('Save'));
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
     $edit = [
       'title[0][value]' => 'Example',
@@ -192,7 +192,7 @@ class EntityReferenceAdminTest extends BrowserTestBase {
       'field_test_entity_ref_field[0][target_id]' => $node1->getTitle() . ' (' . $node1->id() . ')',
     ];
     $this->drupalPostForm('node/add/' . $this->type, $edit, t('Save'));
-    $this->assertLink($node1->getTitle());
+    $this->assertSession()->linkExists($node1->getTitle());
 
     // Tests adding default values to autocomplete widgets.
     Vocabulary::create(['vid' => 'tags', 'name' => 'tags'])->save();

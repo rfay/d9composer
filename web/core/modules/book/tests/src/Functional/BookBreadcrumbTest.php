@@ -53,8 +53,24 @@ class BookBreadcrumbTest extends BrowserTestBase {
     $this->drupalPlaceBlock('page_title_block');
 
     // Create users.
-    $this->bookAuthor = $this->drupalCreateUser(['create new books', 'create book content', 'edit own book content', 'add content to books']);
-    $this->adminUser = $this->drupalCreateUser(['create new books', 'create book content', 'edit any book content', 'delete any book content', 'add content to books', 'administer blocks', 'administer permissions', 'administer book outlines', 'administer content types', 'administer site configuration']);
+    $this->bookAuthor = $this->drupalCreateUser([
+      'create new books',
+      'create book content',
+      'edit own book content',
+      'add content to books',
+    ]);
+    $this->adminUser = $this->drupalCreateUser([
+      'create new books',
+      'create book content',
+      'edit any book content',
+      'delete any book content',
+      'add content to books',
+      'administer blocks',
+      'administer permissions',
+      'administer book outlines',
+      'administer content types',
+      'administer site configuration',
+    ]);
   }
 
   /**
@@ -203,7 +219,7 @@ class BookBreadcrumbTest extends BrowserTestBase {
     $this->assertCount(4, $got_breadcrumb);
     $this->assertEqual($nodes[2]->getTitle(), end($got_breadcrumb));
     $this->drupalGet($nodes[3]->toUrl());
-    $this->assertResponse(403);
+    $this->assertSession()->statusCodeEquals(403);
   }
 
 }

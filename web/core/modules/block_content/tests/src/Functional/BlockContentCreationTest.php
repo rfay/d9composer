@@ -82,7 +82,7 @@ class BlockContentCreationTest extends BlockContentTestBase {
     $this->assertRaw(new FormattableMarkup('A custom block with block description %value already exists.', [
       '%value' => $edit['info[0][value]'],
     ]));
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
   }
 
   /**
@@ -164,7 +164,7 @@ class BlockContentCreationTest extends BlockContentTestBase {
     $this->assertRaw(new FormattableMarkup('A custom block with block description %value already exists.', [
       '%value' => $edit['info[0][value]'],
     ]));
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
   }
 
   /**
@@ -204,7 +204,7 @@ class BlockContentCreationTest extends BlockContentTestBase {
       $this->fail('Expected exception has not been thrown.');
     }
     catch (\Exception $e) {
-      $this->pass('Expected exception has been thrown.');
+      // Expected exception; just continue testing.
     }
 
     $connection = Database::getConnection();

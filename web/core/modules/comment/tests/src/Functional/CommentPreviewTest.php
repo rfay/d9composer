@@ -67,7 +67,7 @@ class CommentPreviewTest extends CommentTestBase {
     $this->drupalPostForm('node/' . $this->node->id(), $edit, t('Preview'));
 
     // Check that the preview is displaying the title and body.
-    $this->assertTitle(t('Preview comment | Drupal'), 'Page title is "Preview comment".');
+    $this->assertTitle('Preview comment | Drupal');
     $this->assertText($edit['subject[0][value]'], 'Subject displayed.');
     $this->assertText($edit['comment_body[0][value]'], 'Comment displayed.');
 
@@ -101,7 +101,7 @@ class CommentPreviewTest extends CommentTestBase {
     $this->drupalPostForm('node/' . $this->node->id(), $edit, t('Preview'));
 
     // Check that the preview is displaying the title and body.
-    $this->assertTitle(t('Preview comment | Drupal'), 'Page title is "Preview comment".');
+    $this->assertTitle('Preview comment | Drupal');
     $this->assertText($edit['subject[0][value]'], 'Subject displayed.');
     $this->assertText($edit['comment_body[0][value]'], 'Comment displayed.');
 
@@ -128,7 +128,12 @@ class CommentPreviewTest extends CommentTestBase {
    * Tests comment edit, preview, and save.
    */
   public function testCommentEditPreviewSave() {
-    $web_user = $this->drupalCreateUser(['access comments', 'post comments', 'skip comment approval', 'edit own comments']);
+    $web_user = $this->drupalCreateUser([
+      'access comments',
+      'post comments',
+      'skip comment approval',
+      'edit own comments',
+    ]);
     $this->drupalLogin($this->adminUser);
     $this->setCommentPreview(DRUPAL_OPTIONAL);
     $this->setCommentForm(TRUE);
@@ -150,7 +155,7 @@ class CommentPreviewTest extends CommentTestBase {
     $this->drupalPostForm('comment/' . $comment->id() . '/edit', $edit, t('Preview'));
 
     // Check that the preview is displaying the subject, comment, author and date correctly.
-    $this->assertTitle(t('Preview comment | Drupal'), 'Page title is "Preview comment".');
+    $this->assertTitle('Preview comment | Drupal');
     $this->assertText($edit['subject[0][value]'], 'Subject displayed.');
     $this->assertText($edit['comment_body[0][value]'], 'Comment displayed.');
     $this->assertText($web_user->getAccountName(), 'Author displayed.');

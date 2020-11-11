@@ -112,7 +112,7 @@ class ColorTest extends BrowserTestBase {
 
     $this->drupalLogin($this->bigUser);
     $this->drupalGet($settings_path);
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     $this->assertUniqueText('Color set');
     $edit['scheme'] = '';
     $edit[$test_values['palette_input']] = '#123456';
@@ -120,14 +120,15 @@ class ColorTest extends BrowserTestBase {
 
     $this->drupalGet('<front>');
     $stylesheets = $this->config('color.theme.' . $theme)->get('stylesheets');
+    // Make sure the color stylesheet is included in the content.
     foreach ($stylesheets as $stylesheet) {
-      $this->assertPattern('|' . file_url_transform_relative(file_create_url($stylesheet)) . '|', 'Make sure the color stylesheet is included in the content. (' . $theme . ')');
+      $this->assertPattern('|' . file_url_transform_relative(file_create_url($stylesheet)) . '|');
       $stylesheet_content = implode("\n", file($stylesheet));
       $this->assertStringContainsString('color: #123456', $stylesheet_content, 'Make sure the color we changed is in the color stylesheet. (' . $theme . ')');
     }
 
     $this->drupalGet($settings_path);
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     $edit['scheme'] = $test_values['scheme'];
     $this->drupalPostForm($settings_path, $edit, t('Save configuration'));
 

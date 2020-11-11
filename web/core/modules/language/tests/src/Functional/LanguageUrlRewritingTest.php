@@ -39,7 +39,10 @@ class LanguageUrlRewritingTest extends BrowserTestBase {
     parent::setUp();
 
     // Create and log in user.
-    $this->webUser = $this->drupalCreateUser(['administer languages', 'access administration pages']);
+    $this->webUser = $this->drupalCreateUser([
+      'administer languages',
+      'access administration pages',
+    ]);
     $this->drupalLogin($this->webUser);
 
     // Install French language.
@@ -97,7 +100,7 @@ class LanguageUrlRewritingTest extends BrowserTestBase {
     $prefix = $stored_prefix;
 
     $this->drupalGet("$prefix/$path");
-    $this->assertResponse(404);
+    $this->assertSession()->statusCodeEquals(404);
   }
 
   /**

@@ -66,7 +66,7 @@ class CommentTypeTest extends CommentTestBase {
 
     // Ensure that the new comment type admin page can be accessed.
     $this->drupalGet('admin/structure/comment/manage/' . $type->id());
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
     // Create a comment type via the user interface.
     $edit = [
@@ -186,7 +186,7 @@ class CommentTypeTest extends CommentTestBase {
       $this->fail('Exception not thrown.');
     }
     catch (\InvalidArgumentException $e) {
-      $this->pass('Exception thrown if attempting to re-use comment-type from another entity type.');
+      // Expected exception; just continue testing.
     }
 
     // Delete the comment type.

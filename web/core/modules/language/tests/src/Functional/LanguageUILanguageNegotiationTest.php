@@ -74,7 +74,12 @@ class LanguageUILanguageNegotiationTest extends BrowserTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    $this->adminUser = $this->drupalCreateUser(['administer languages', 'translate interface', 'access administration pages', 'administer blocks']);
+    $this->adminUser = $this->drupalCreateUser([
+      'administer languages',
+      'translate interface',
+      'access administration pages',
+      'administer blocks',
+    ]);
     $this->drupalLogin($this->adminUser);
   }
 
@@ -257,7 +262,7 @@ class LanguageUILanguageNegotiationTest extends BrowserTestBase {
       ->set('negotiation.' . LanguageInterface::TYPE_INTERFACE . '.enabled', array_flip(array_keys($language_interface_method_definitions)))
       ->save();
     $this->drupalGet("$langcode_unknown/admin/config", [], $http_header_browser_fallback);
-    $this->assertResponse(404);
+    $this->assertSession()->statusCodeEquals(404);
 
     // Set preferred langcode for user to NULL.
     $account = $this->loggedInUser;
@@ -412,7 +417,7 @@ class LanguageUILanguageNegotiationTest extends BrowserTestBase {
     // match.
     Cache::invalidateTags(['route_match']);
     $this->drupalGet('system/files/test/private-file-test.txt');
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
   }
 
   /**
@@ -580,7 +585,7 @@ class LanguageUILanguageNegotiationTest extends BrowserTestBase {
       'language_content[configurable]' => FALSE,
     ];
     $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
     // Check if the language switcher block has been removed.
     $block = Block::load($block_id);

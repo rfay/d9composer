@@ -275,6 +275,14 @@ class EntityQueryTest extends EntityKernelTestBase {
       $entity->name->value .= 'x';
       $entity->save();
     }
+    // Test querying all revisions with a condition on the revision ID field.
+    $this->queryResults = $this->storage
+      ->getQuery()
+      ->condition('revision_id', $first_entity->getRevisionId())
+      ->allRevisions()
+      ->execute();
+    $this->assertCount(1, $this->queryResults);
+    $this->assertEquals($first_entity->getRevisionId(), key($this->queryResults));
     // We changed the entity names, so the current revision should not match.
     $this->queryResults = $this->storage
       ->getQuery()
@@ -565,7 +573,7 @@ class EntityQueryTest extends EntityKernelTestBase {
    */
   public function testConditionCount() {
     // Query for all entities of the first bundle that
-    // have red as a colour AND are triangle shaped.
+    // have red as a color AND are triangle shaped.
     $query = $this->storage->getQuery();
 
     // Add an AND condition group with 2 conditions in it.
@@ -1098,17 +1106,12 @@ class EntityQueryTest extends EntityKernelTestBase {
    * database driver's EntityQuery\Condition class.
    */
   public function testInjectionInCondition() {
-    try {
-      $this->queryResults = $this->storage
-        ->getQuery()
-        ->condition('1 ; -- ', [0, 1], 'IN')
-        ->sort('id')
-        ->execute();
-      $this->fail('SQL Injection attempt in Entity Query condition in operator should result in an exception.');
-    }
-    catch (\Exception $e) {
-      $this->pass('SQL Injection attempt in Entity Query condition in operator should result in an exception.');
-    }
+    $this->expectException(\Exception::class);
+    $this->queryResults = $this->storage
+      ->getQuery()
+      ->condition('1 ; -- ', [0, 1], 'IN')
+      ->sort('id')
+      ->execute();
   }
 
   /**
